@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.4
 import PackageDescription
 
 let package = Package(
@@ -14,7 +14,7 @@ let package = Package(
         .package(url: "https://github.com/vapor/async-kit.git", from: "1.0.0"),
     ],
     targets: [
-        .target(
+        .executableTarget(
             name: "ghrepoclean",
             dependencies: [
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
@@ -25,8 +25,8 @@ let package = Package(
             ],
             swiftSettings: [
                 .unsafeFlags(["-Xfrontend", "-enable-experimental-concurrency"]),
-                .unsafeFlags(["-parse-as-library"]), // SR-12683
-                .unsafeFlags(["-cross-module-optimization"], .when(configuration: .release)),
+//                .unsafeFlags(["-parse-as-library"]), // SR-12683
+//                .unsafeFlags(["-cross-module-optimization"], .when(configuration: .release)),
             ]
         ),
         .testTarget(
