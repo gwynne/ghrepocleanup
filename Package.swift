@@ -25,14 +25,6 @@ let package = Package(
             ],
             swiftSettings: [
                 .unsafeFlags(["-Xfrontend", "-enable-experimental-concurrency"]),
-//                .unsafeFlags(["-parse-as-library"]), // SR-12683
-//                .unsafeFlags(["-cross-module-optimization"], .when(configuration: .release)),
-            ]
-        ),
-        .testTarget(
-            name: "ghrepocleanTests",
-            dependencies: [
-                .target(name: "ghrepoclean"),
             ]
         ),
     ]
