@@ -321,7 +321,7 @@ enum Github {
         let required_status_checks: RequiredStatusChecks?
         let enforce_admins: Bool?
         let required_pull_request_reviews: RequiredPullRequestReviews?
-        let restrictions: Restrictions?
+        let restrictions: Restrictions
         let required_linear_history: Bool
         let allow_force_pushes: Bool
         let allow_deletions: Bool

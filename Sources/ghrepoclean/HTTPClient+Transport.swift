@@ -23,18 +23,19 @@ extension HTTPClient: Transport {
             return completion(.error(.unknown(error)))
         }
         
-        self.execute(request: httpRequest).whenComplete(success: { response in
-            guard 200 ..< 300 ~= response.status.code else {
-                if let status = APIError.Status(code: Int(response.status.code)) {
-                    return completion(.failure(status: status, body: response.body.map { Data($0.readableBytesView) } ?? Data()))
-                } else {
-                    return completion(.error(.network(.init(.cannotParseResponse))))
+        self.execute(request: httpRequest).whenComplete { switch $0 {
+            case .success(let response):
+                guard 200 ..< 300 ~= response.status.code else {
+                    if let status = APIError.Status(code: Int(response.status.code)) {
+                        return completion(.failure(status: status, body: response.body.map { Data($0.readableBytesView) } ?? Data()))
+                    } else {
+                        return completion(.error(.network(.init(.cannotParseResponse))))
+                    }
                 }
-            }
-            return completion(.success(response.body.map { Data($0.readableBytesView) } ?? Data()))
-        }, failure: { error in
-            return completion(.error(.unknown(error)))
-        })
+                return completion(.success(response.body.map { Data($0.readableBytesView) } ?? Data()))
+            case .failure(let error):
+                return completion(.error(.unknown(error)))
+        } }
     }
 }
 

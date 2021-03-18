@@ -104,6 +104,7 @@ enum GithubAPI {
         func makeRequest(baseURL: URL) throws -> URLRequest {
             var request = URLRequest(url: baseURL.traversing("repos", self.owner, self.repo, "branches", self.branch, for: "protection"), method: HTTPMethod.PUT.rawValue)
             request.httpBody = try GithubAPI.jsonEncoder.encode(self.update)
+            request.setValue("application/vnd.github.luke-cage-preview+json", forHTTPHeaderField: "accept")
             return request
         }
         
@@ -122,6 +123,21 @@ enum GithubAPI {
         }
         
         func parseResponse(_ data: Data) throws -> Void {}
+    }
+    
+    struct RenameBranch: GithubAPIRequest {
+        typealias ResponseDataType = Github.Branch
+        
+        let owner: String
+        let repo: String
+        let branch: String
+        let new_name: String
+        
+        func makeRequest(baseURL: URL) throws -> URLRequest {
+            var request = URLRequest(url: baseURL.traversing("repos", self.owner, self.repo, "branches", self.branch, for: "rename"), method: HTTPMethod.POST.rawValue)
+            request.httpBody = try GithubAPI.jsonEncoder.encode(["new_name": self.new_name])
+            return request
+        }
     }
     
     struct GetRef: GithubAPIRequest {
